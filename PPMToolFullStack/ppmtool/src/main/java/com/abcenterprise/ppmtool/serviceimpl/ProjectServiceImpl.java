@@ -1,0 +1,50 @@
+package com.abcenterprise.ppmtool.serviceimpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.abcenterprise.ppmtool.daoservice.ProjectDaoService;
+import com.abcenterprise.ppmtool.domain.Project;
+import com.abcenterprise.ppmtool.exception.ProjectIdException;
+import com.abcenterprise.ppmtool.exception.ProjectNotFoundException;
+import com.abcenterprise.ppmtool.services.ProjectService;
+
+@Component
+public class ProjectServiceImpl implements ProjectService {
+
+	@Autowired
+	ProjectDaoService daoService;
+
+	public void saveOrUpdateProject(Project project) {
+		try {
+			project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+			daoService.save(project);
+		} catch (Exception e) {
+			throw new ProjectIdException("Project id : " + project.getProjectIdentifier() + " alredy exist!");
+		}
+	}
+
+	@Override
+	public Project findByProjectIdentifier(String projectIdentifier) throws ProjectNotFoundException {
+		boolean flag = daoService.findProjectByProjectIdentifierName(projectIdentifier.toUpperCase());
+		if (flag)
+			return daoService.findProjectByProjectId(projectIdentifier);
+		else
+			throw new ProjectNotFoundException("Project " + projectIdentifier + "is not present");
+	}
+
+	@Override
+	public Iterable findAllProjects() {
+		return daoService.findAll();
+	}
+
+	@Override
+	public void deleteProject(String projectIdentifierName) {
+		daoService.deleteProjectByProjectIdentifierName(projectIdentifierName.toUpperCase());
+	}
+
+	@Override
+	public boolean updateProject(Project project) {
+		return daoService.updateProject(project);
+	}
+}
