@@ -14,32 +14,32 @@ public class BacklogServiceImpl implements BacklogService {
 	BacklogDaoService backlogDaoService;
 
 	@Override
-	public void addProjectTask(String projectIdentifier, ProjectTask projectask) {
+	public void addProjectTask(String projectIdentifier, ProjectTask projectask, String username) {
 
-		backlogDaoService.addProjectTask(projectIdentifier, projectask);
+		backlogDaoService.addProjectTask(projectIdentifier, projectask, username);
 
 	}
 
 	@Override
-	public Iterable<ProjectTask> findBacklogById(String projectIdentifier) {
+	public Iterable<ProjectTask> findBacklogById(String projectIdentifier,  String username) {
 
-		return backlogDaoService.findBacklogById(projectIdentifier);
+		return backlogDaoService.findBacklogById(projectIdentifier, username);
 	}
 
 	@Override
-	public ProjectTask findByProjectSequence(String backlog_id, String projectSequence) {
-		return backlogDaoService.findByProjectSequence(backlog_id, projectSequence);
+	public ProjectTask findByProjectSequence(String backlog_id, String projectSequence,String username) {
+		return backlogDaoService.findByProjectSequence(backlog_id, projectSequence, username);
 	}
 
 	@Override
 	public ProjectTask updateProjectTaskByProjectSequence(ProjectTask projectTask, String backlog_id,
-			String projectSequence) {
-		return backlogDaoService.updateProjectTaskByProjectSequence(projectTask, backlog_id, projectSequence);
+			String projectSequence, String username) {
+		return backlogDaoService.updateProjectTaskByProjectSequence(projectTask, backlog_id, projectSequence, username);
 	}
 
 	@Override
-	public void deleteProjectTaskByProjectSequence(String backlog_id, String projectSequence) {
-		backlogDaoService.deleteProjectTaskByProjectSequence(backlog_id, projectSequence);
+	public void deleteProjectTaskByProjectSequence(String backlog_id, String projectSequence, String username) {
+		backlogDaoService.deleteProjectTaskByProjectSequence(backlog_id, projectSequence, username);
 
 	}
 

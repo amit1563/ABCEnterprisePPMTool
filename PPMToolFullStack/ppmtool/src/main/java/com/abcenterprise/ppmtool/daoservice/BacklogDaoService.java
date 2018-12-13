@@ -7,17 +7,17 @@ import com.abcenterprise.ppmtool.exception.ProjectTaskNotFoundException;
 
 public interface BacklogDaoService {
 
-	public void addProjectTask(String projectIdentifier, ProjectTask projectask) throws ProjectNotFoundException;
+	public void addProjectTask(String projectIdentifier, ProjectTask projectask, String username) throws ProjectNotFoundException;
 
-	Iterable<ProjectTask> findBacklogById(String projectIdentifier) throws ProjectNotFoundException;
+	Iterable<ProjectTask> findBacklogById(String projectIdentifier, String username) throws ProjectNotFoundException;
 
-	ProjectTask findByProjectSequence(String backlog_id, String projectSequence)
+	ProjectTask findByProjectSequence(String backlog_id, String projectSequence, String username)
 			throws BacklogNotFoundException, ProjectTaskNotFoundException;
 
-	ProjectTask updateProjectTaskByProjectSequence(ProjectTask projectTask, String backlog_id, String projectSequence)
+	ProjectTask updateProjectTaskByProjectSequence(ProjectTask projectTask, String backlog_id, String projectSequence, String username)
 			throws ProjectTaskNotFoundException;
 
-	void deleteProjectTaskByProjectSequence(String backlog_id, String projectSequence)
+	void deleteProjectTaskByProjectSequence(String backlog_id, String projectSequence, String username)
 			throws ProjectTaskNotFoundException;
 
 }

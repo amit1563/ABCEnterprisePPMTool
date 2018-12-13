@@ -1,24 +1,32 @@
 package com.abcenterprise.ppmtool.daoserviceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.abcenterprise.ppmtool.daoservice.BacklogDaoService;
 import com.abcenterprise.ppmtool.domain.Backlog;
+import com.abcenterprise.ppmtool.domain.Project;
 import com.abcenterprise.ppmtool.domain.ProjectTask;
 import com.abcenterprise.ppmtool.exception.BacklogNotFoundException;
 import com.abcenterprise.ppmtool.exception.ProjectNotFoundException;
 import com.abcenterprise.ppmtool.exception.ProjectTaskNotFoundException;
 import com.abcenterprise.ppmtool.repositories.BacklogRepository;
 import com.abcenterprise.ppmtool.repositories.ProjectTaskRepository;
+import com.abcenterprise.ppmtool.services.ProjectService;
 
 @Service
 public class BacklogDaoServiceImpl implements BacklogDaoService {
 
 	@Autowired
-	ProjectTaskRepository projectTaskRepo;
+	private ProjectTaskRepository projectTaskRepo;
 	@Autowired
-	BacklogRepository backlogRepo;
+	private BacklogRepository backlogRepo;
+	@Autowired
+	private ProjectService projectService;
 
 	/**
 	 * This method is to add project tasks to the backlog object step 1 : get the
@@ -30,8 +38,9 @@ public class BacklogDaoServiceImpl implements BacklogDaoService {
 	 * scenarios when priority and status is null
 	 */
 	@Override
-	public void addProjectTask(String projectIdentifier, ProjectTask projectask) {
-		Backlog backlog = backlogRepo.findByProjectIdentifier(projectIdentifier);
+	public void addProjectTask(String projectIdentifier, ProjectTask projectask,String username) {
+		projectIdentifier = projectIdentifier.toUpperCase();
+		Backlog backlog = projectService.findByProjectIdentifier(projectIdentifier, username).getBacklog();//backlogRepo.findByProjectIdentifier(projectIdentifier);
 		if (backlog == null)
 			throw new ProjectNotFoundException("Project Not found for given projectIdentifier");
 		projectask.setBacklog(backlog);
@@ -49,17 +58,32 @@ public class BacklogDaoServiceImpl implements BacklogDaoService {
 	}
 
 	@Override
-	public Iterable<ProjectTask> findBacklogById(String projectIdentifier) {
-
+	public Iterable<ProjectTask> findBacklogById(String projectIdentifier , String username) {
+		
+		projectIdentifier = projectIdentifier.toUpperCase();
+		Project project = projectService.findByProjectIdentifier(projectIdentifier, username);
 		if (projectTaskRepo.findByProjectIdentifierOrderByPriority(projectIdentifier).isEmpty()) {
 			throw new ProjectNotFoundException("Project Not found for given projectIdentifier");
 		}
-		return projectTaskRepo.findByProjectIdentifierOrderByPriority(projectIdentifier);
+		Iterable<ProjectTask> itrable = projectTaskRepo.findByProjectIdentifierOrderByPriority(projectIdentifier);
+		List<ProjectTask> projectTasksList = new ArrayList<>();
+		itrable.forEach(new Consumer<ProjectTask>() {
+
+			@Override
+			public void accept(ProjectTask projectTask) {
+				if(projectTask.getProjectIdentifier().equals(project.getProjectIdentifier())) {
+					projectTasksList.add(projectTask);
+				}
+			}		
+		});
+		return projectTasksList;
 	}
 
 	@Override
-	public ProjectTask findByProjectSequence(String backlog_id, String projectSequence) {
-		Backlog backlog = backlogRepo.findByProjectIdentifier(backlog_id);
+	public ProjectTask findByProjectSequence(String backlog_id, String projectSequence, String username) {
+		backlog_id = backlog_id.toUpperCase();
+		projectSequence = projectSequence.toUpperCase();
+		Backlog backlog =  projectService.findByProjectIdentifier(backlog_id, username).getBacklog(); //backlogRepo.findByProjectIdentifier(backlog_id);
 
 		if (backlog == null) {
 			throw new BacklogNotFoundException("backlog Not found for given backlog_id");
@@ -83,10 +107,11 @@ public class BacklogDaoServiceImpl implements BacklogDaoService {
 
 	@Override
 	public ProjectTask updateProjectTaskByProjectSequence(ProjectTask projectTask, String backlog_id,
-			String projectSequence) throws ProjectTaskNotFoundException {
+			String projectSequence, String username) throws ProjectTaskNotFoundException {
+		
 		ProjectTask projectTaskTemp = null;
 		try {
-			projectTaskTemp = findByProjectSequence(backlog_id.toUpperCase(), projectSequence.toUpperCase());
+			projectTaskTemp = findByProjectSequence(backlog_id, projectSequence,username );
 		} catch (BacklogNotFoundException | ProjectTaskNotFoundException ex) {
 			throw new ProjectTaskNotFoundException("Project Task with provided project task equence " + projectSequence
 					+ "' does not exist in backlog for the given backlog id : '" + backlog_id
@@ -104,11 +129,12 @@ public class BacklogDaoServiceImpl implements BacklogDaoService {
 	}
 
 	@Override
-	public void deleteProjectTaskByProjectSequence(String backlog_id, String projectSequence)
+	public void deleteProjectTaskByProjectSequence(String backlog_id, String projectSequence, String username)
 			throws ProjectTaskNotFoundException {
 		ProjectTask projectTaskTemp = null;
+		backlog_id = backlog_id.toUpperCase();
 		try {
-			projectTaskTemp = findByProjectSequence(backlog_id, projectSequence);
+			projectTaskTemp = findByProjectSequence(backlog_id, projectSequence, username);
 		} catch (BacklogNotFoundException | ProjectTaskNotFoundException ex) {
 			throw new ProjectTaskNotFoundException("Project Task with provided project task equence " + projectSequence
 					+ "' does not exist in backlog for the given backlog id : '" + backlog_id

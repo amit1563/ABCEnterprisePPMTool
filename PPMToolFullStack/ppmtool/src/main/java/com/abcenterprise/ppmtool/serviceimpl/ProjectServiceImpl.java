@@ -21,7 +21,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 	public void saveOrUpdateProject(Project project, String username) {
 		try {
-			project.setProjectIdentifier(project.getProjectIdentifier());
+			String projectIdentifier = project.getProjectIdentifier().toUpperCase();
+			project.setProjectIdentifier(projectIdentifier);
 			// get user object by providing username provide by Principle object of spring
 			// security and set the project state accordingly
 			User user = userDaoService.findUserByUserName(username);
