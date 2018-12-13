@@ -10,12 +10,12 @@ public interface ProjectService {
 
 	public void saveOrUpdateProject(Project project, String username);
 
-	public Project findByProjectIdentifier(String projectIdentifier) throws ProjectNotFoundException;
+	public Project findByProjectIdentifier(String projectIdentifier, String username) throws ProjectNotFoundException;
 
-	public Iterable findAllProjects();
+	public Iterable findAllProjects(String username);
 
-	public void deleteProject(String projectIdentifierName);
+	public void deleteProject(String projectIdentifierName, String username);
 
-	public boolean updateProject(Project project);
+	public boolean updateProject(Project project, String username);
 
 }

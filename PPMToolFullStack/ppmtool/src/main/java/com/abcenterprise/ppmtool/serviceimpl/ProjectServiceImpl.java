@@ -21,21 +21,25 @@ public class ProjectServiceImpl implements ProjectService {
 
 	public void saveOrUpdateProject(Project project, String username) {
 		try {
-			project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+			project.setProjectIdentifier(project.getProjectIdentifier());
 			// get user object by providing username provide by Principle object of spring
 			// security and set the project state accordingly
 			User user = userDaoService.findUserByUserName(username);
 			project.setUser(user);
 			project.setProjectLeader(user.getUsername());
-			daoService.save(project);
-		} catch (Exception e) {
+			daoService.save(project, username);
+		} 
+		catch(ProjectNotFoundException pnfe) {
+			throw new ProjectIdException(pnfe.getMessage());
+		}
+		catch (Exception e) {
 			throw new ProjectIdException("Project id : " + project.getProjectIdentifier() + " alredy exist!");
 		}
 	}
 
 	@Override
-	public Project findByProjectIdentifier(String projectIdentifier) throws ProjectNotFoundException {
-		boolean flag = daoService.findProjectByProjectIdentifierName(projectIdentifier.toUpperCase());
+	public Project findByProjectIdentifier(String projectIdentifier, String username) throws ProjectNotFoundException {
+		boolean flag = daoService.findProjectByProjectIdentifierName(projectIdentifier, username);
 		if (flag)
 			return daoService.findProjectByProjectId(projectIdentifier);
 		else
@@ -43,17 +47,29 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public Iterable findAllProjects() {
-		return daoService.findAll();
+	public Iterable findAllProjects(String username) {
+		return daoService.findAll(username);
 	}
 
 	@Override
-	public void deleteProject(String projectIdentifierName) {
-		daoService.deleteProjectByProjectIdentifierName(projectIdentifierName.toUpperCase());
+	public void deleteProject(String projectIdentifierName,String username) {
+		try {
+			daoService.deleteProjectByProjectIdentifierName(projectIdentifierName, username);
+		}
+		catch(ProjectNotFoundException pnfe) {
+			throw new ProjectIdException(pnfe.getMessage());
+		}
 	}
 
 	@Override
-	public boolean updateProject(Project project) {
-		return daoService.updateProject(project);
+	public boolean updateProject(Project project,String username) {
+		try {
+			User user = userDaoService.findUserByUserName(username);
+			project.setProjectLeader(user.getUsername());
+			daoService.updateProject(project, username);
+		}catch(ProjectNotFoundException pnfe) {
+			throw new ProjectIdException(pnfe.getMessage());
+		}
+		return true;
 	}
 }

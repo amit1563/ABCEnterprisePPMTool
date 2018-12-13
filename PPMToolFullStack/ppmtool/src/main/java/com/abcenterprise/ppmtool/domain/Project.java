@@ -43,6 +43,8 @@ public class Project {
 	private Date created_At;
 	@JsonFormat(pattern = "YYYY-MM-DD")
 	private Date updated_At;
+	
+	// to tag project with the username in the db
 	private String projectLeader;
 	/*
 	 * Many projects will have same user and we are loading it lazy beacause we

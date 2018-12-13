@@ -10,14 +10,14 @@ public interface ProjectDaoService {
 	boolean findProjectByProjectName(String userName) throws ProjectNotFoundException;
 	Project findProjectByProjectId(String id) throws ProjectNotFoundException;
 	
-	void save (Project project);
-	boolean findProjectByProjectIdentifierName(String projectIdentifier) throws ProjectNotFoundException;
+	void save (Project project, String username);
+	boolean findProjectByProjectIdentifierName(String projectIdentifier, String username) throws ProjectNotFoundException;
 	
-	Iterable<?> findAll();
+	Iterable<?> findAll(String username);
 	
-	void deleteProjectByProjectIdentifierName(String projectIdentifier) throws ProjectNotFoundException;
+	void deleteProjectByProjectIdentifierName(String projectIdentifier,String username) throws ProjectNotFoundException;
 	
-	boolean updateProject(Project project);
+	boolean updateProject(Project project,String username);
 
 	
 	

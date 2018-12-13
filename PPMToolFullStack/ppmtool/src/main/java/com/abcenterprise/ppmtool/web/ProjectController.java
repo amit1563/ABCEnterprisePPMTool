@@ -44,31 +44,31 @@ public class ProjectController {
 	}
 
 	@GetMapping("/{projectId}")
-	public ResponseEntity<?> getProjectByProjectIdentifier(@PathVariable String projectId) {
-		Project project = projectService.findByProjectIdentifier(projectId.toUpperCase());
+	public ResponseEntity<?> getProjectByProjectIdentifier(@PathVariable String projectId , Principal principal) {
+		Project project = projectService.findByProjectIdentifier(projectId,principal.getName() );
 		if (project != null)
 			return new ResponseEntity<Project>(project, HttpStatus.ACCEPTED);
 		return null;
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<?> getAllProjects() {
-		return new ResponseEntity<Iterable<Project>>(projectService.findAllProjects(), HttpStatus.ACCEPTED);
+	public ResponseEntity<?> getAllProjects(Principal principal) {
+		return new ResponseEntity<Iterable<Project>>(projectService.findAllProjects(principal.getName()), HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping("/delete/{projectIdentifierName}")
-	public ResponseEntity<?> deleteProject(@PathVariable String projectIdentifierName) {
-		projectService.deleteProject(projectIdentifierName.toUpperCase());
+	public ResponseEntity<?> deleteProject(@PathVariable String projectIdentifierName, Principal principal) {
+		projectService.deleteProject(projectIdentifierName,principal.getName());
 		return new ResponseEntity<String>("Project deleted successfully!", HttpStatus.OK);
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<?> updateProject(@Valid @RequestBody Project project, BindingResult result) {
+	public ResponseEntity<?> updateProject(@Valid @RequestBody Project project, BindingResult result, Principal principal) {
 		ResponseEntity<?> errorMap = fieldErrorHandler.mapValidationError(result);
 		if (errorMap != null) {
 			return errorMap;
 		}
-		if (projectService.updateProject(project))
+		if (projectService.updateProject(project, principal.getName()))
 			return new ResponseEntity<String>("Project updated successfully", HttpStatus.OK);
 		return null;
 	}
