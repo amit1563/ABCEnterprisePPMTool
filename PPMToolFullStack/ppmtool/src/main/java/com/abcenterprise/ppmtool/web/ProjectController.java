@@ -1,5 +1,7 @@
 package com.abcenterprise.ppmtool.web;
 
+import java.security.Principal;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +32,14 @@ public class ProjectController {
 	FieldErrorHandler fieldErrorHandler;
 
 	@PostMapping("/create")
-	public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result) {
+	public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result,
+			Principal principal) {
 		ResponseEntity<?> errorMap = fieldErrorHandler.mapValidationError(result);
 		if (errorMap != null) {
 			return errorMap;
 		}
-		projectService.saveOrUpdateProject(project);
+
+		projectService.saveOrUpdateProject(project, principal.getName());
 		return new ResponseEntity<Project>(project, HttpStatus.CREATED);
 	}
 

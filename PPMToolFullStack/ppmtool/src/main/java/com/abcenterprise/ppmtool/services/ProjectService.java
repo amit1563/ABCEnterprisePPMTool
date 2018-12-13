@@ -8,7 +8,7 @@ import com.abcenterprise.ppmtool.exception.ProjectNotFoundException;
 @Service
 public interface ProjectService {
 
-	public void saveOrUpdateProject(Project project);
+	public void saveOrUpdateProject(Project project, String username);
 
 	public Project findByProjectIdentifier(String projectIdentifier) throws ProjectNotFoundException;
 

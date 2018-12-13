@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.abcenterprise.ppmtool.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,6 +43,14 @@ public class Project {
 	private Date created_At;
 	@JsonFormat(pattern = "YYYY-MM-DD")
 	private Date updated_At;
+	private String projectLeader;
+	/*
+	 * Many projects will have same user and we are loading it lazy beacause we
+	 * don't want to to user
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	private User user;
 	/*
 	 * one Project can have maximum one backlog (oneToone with backlog)
 	 * 
@@ -141,5 +151,21 @@ public class Project {
 
 	public void setUpdated_At(Date updated_At) {
 		this.updated_At = updated_At;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getProjectLeader() {
+		return projectLeader;
+	}
+
+	public void setProjectLeader(String projectLeader) {
+		this.projectLeader = projectLeader;
 	}
 }

@@ -48,7 +48,8 @@ public class BacklogController {
 
 	@GetMapping("/{backlog_id}/{projectSequence}")
 	public ResponseEntity<?> getProjectTask(@PathVariable String backlog_id, @PathVariable String projectSequence) {
-		ProjectTask projectTask = backlogService.findByProjectSequence(backlog_id.toUpperCase(), projectSequence.toUpperCase());
+		ProjectTask projectTask = backlogService.findByProjectSequence(backlog_id.toUpperCase(),
+				projectSequence.toUpperCase());
 		return new ResponseEntity<ProjectTask>(projectTask, HttpStatus.OK);
 	}
 

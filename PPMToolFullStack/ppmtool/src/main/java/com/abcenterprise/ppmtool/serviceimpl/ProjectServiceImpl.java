@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.abcenterprise.ppmtool.daoservice.ProjectDaoService;
+import com.abcenterprise.ppmtool.daoservice.UserDaoService;
 import com.abcenterprise.ppmtool.domain.Project;
+import com.abcenterprise.ppmtool.domain.user.User;
 import com.abcenterprise.ppmtool.exception.ProjectIdException;
 import com.abcenterprise.ppmtool.exception.ProjectNotFoundException;
 import com.abcenterprise.ppmtool.services.ProjectService;
@@ -14,10 +16,17 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Autowired
 	ProjectDaoService daoService;
+	@Autowired
+	UserDaoService userDaoService;
 
-	public void saveOrUpdateProject(Project project) {
+	public void saveOrUpdateProject(Project project, String username) {
 		try {
 			project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+			// get user object by providing username provide by Principle object of spring
+			// security and set the project state accordingly
+			User user = userDaoService.findUserByUserName(username);
+			project.setUser(user);
+			project.setProjectLeader(user.getUsername());
 			daoService.save(project);
 		} catch (Exception e) {
 			throw new ProjectIdException("Project id : " + project.getProjectIdentifier() + " alredy exist!");
