@@ -8,5 +8,5 @@
        errors : errorReducer,
        project : projectReducer,
        backlog : backlogReducer,
-      security : securityReducer
+       security : securityReducer
    });

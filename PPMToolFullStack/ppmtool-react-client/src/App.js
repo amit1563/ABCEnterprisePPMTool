@@ -14,11 +14,31 @@ import UpdateProjectTask from './components/ProjectBoard/ProjectTasks/UpdateProj
 import Landing from './components/Landing/Landing';
 import Login from './components/User/Login';
 import SignUp from './components/User/SignUp';
-
+import {SET_CURRENT_USER} from './actions/types'
+import setJWTToken from './securityUtils/setJWTToken'
+import jwt_decode from 'jwt-decode'
+import { logout } from "./actions/userActions";
 
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
+const token = localStorage.jwtToken;
+   if(token){
+     setJWTToken(token);
+     const decoded_jwtToken = jwt_decode(token);
+     store.dispatch({
+       type : SET_CURRENT_USER,
+       payload :decoded_jwtToken
+     })
+
+   const currentTime = Date.now()/1000;
+
+   if(decoded_jwtToken.exp<currentTime){
+   store.dispatch(logout());
+  window.location.href = "/";
+   }
+    }
 class App extends Component {
+
   render() {
     return (
       <Provider store = {store}>

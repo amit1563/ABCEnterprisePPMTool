@@ -6,21 +6,20 @@ const initialState = {
 }
 const booleanValidTokenForPayload = (payload) =>{
   if(payload){
-    this.validToken = true
+    return true;
   } else {
-    this.validToken = false
+    return false
   }
 }
 export default function(state = initialState, action){
   switch(action.type  ){
     case SET_CURRENT_USER :
-    return {
+    return{
       ... state,
       validToken : booleanValidTokenForPayload(action.payload),
       user : action.payload
     }
-
-    default :
+     default :
      return state
   }
 }
