@@ -27,7 +27,7 @@ HashMap<String,String> ValidationErrorMap = new HashMap<>();
 		User user = (User)object;
 		ValidationErrorMap.clear();
 		if(user.getPassword().length() <6) {
-			ValidationErrorMap.put("passwordLength", "Password must be at least 6 characters");
+			ValidationErrorMap.put("password", "Password must be at least 6 characters");
 		}
 		if (!user.getPassword().equals(user.getConfirmPassword())) {
 			ValidationErrorMap.put("confirmPassword", "Password must match");	

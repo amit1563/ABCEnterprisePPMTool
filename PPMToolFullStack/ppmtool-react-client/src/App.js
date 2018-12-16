@@ -11,6 +11,9 @@ import updateProjectComponent from './components/project/updateProjectComponent'
 import ProjectBoard from './components/ProjectBoard/ProjectBoard.js'
 import AddProjectTask from './components/ProjectBoard/ProjectTasks/AddProjectTask'
 import UpdateProjectTask from './components/ProjectBoard/ProjectTasks/UpdateProjectTask'
+import Landing from './components/Landing/Landing';
+import Login from './components/User/Login';
+import SignUp from './components/User/SignUp';
 
 
 import {BrowserRouter as Router, Route} from 'react-router-dom';
@@ -22,6 +25,15 @@ class App extends Component {
       <Router>
       <div className="App">
         <Header/>
+        {
+          //start of unsecure route
+        }
+        <Route exact path = "/" component = {Landing}/>
+        <Route exact path = "/login" component = {Login}/>
+        <Route exact path = "/signUp" component = {SignUp}/>
+        {
+          //start of secure routing
+        }
         <Route exact path = "/addProject" component={AddProject} />
         <Route exact path = "/dashboard" component={Dashboard}/>
         <Route exact path = "/updateProject/:id" component ={updateProjectComponent}/>
