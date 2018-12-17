@@ -40,7 +40,6 @@ onSubmit(e){
     password : this.state.password,
     confirmPassword : this.state.confirmPassword
   }
-  console.log(newuser);
   this.props.signUp(newuser, this.props.history);
 
 }
