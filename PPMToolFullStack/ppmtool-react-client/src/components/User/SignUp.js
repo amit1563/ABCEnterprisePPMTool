@@ -45,6 +45,19 @@ onSubmit(e){
 }
   render () {
     const {errors} = this.state;
+    const errorHandler = (errors)=>{
+    if(errors.username) {
+      return (
+        <div className="invalid-feedback">{errors.username}</div>
+      )}
+      else if(errors.message){
+        return (
+          <div className="alert alert-info text-center" role="alert">
+                {errors.message}
+              </div>
+        )
+      }
+    }
     return (
       <div className="register">
             <div className="container">
@@ -62,16 +75,10 @@ onSubmit(e){
                             value = {this.state.username}
                             onChange = {this.onChange}
                             />
-                            {errors.username && (
-                              <div className = "invalid-feedback">
-                              {errors.username}
-                              </div>
-                            )}
-                            {errors.message && (
-                              <div className = "invalid-feedback">
-                              {errors.message}
-                              </div>
-                            )}
+                            {
+                              errorHandler(errors)
+                            }
+
 
                           </div>
 

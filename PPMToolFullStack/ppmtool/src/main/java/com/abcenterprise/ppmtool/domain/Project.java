@@ -35,9 +35,9 @@ public class Project {
 	private String projectIdentifier;
 	@NotBlank(message = "Project Description Reuired")
 	private String description;
-	@JsonFormat(pattern = "YYYY-MM-DD")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date start_date;
-	@JsonFormat(pattern = "YYYY-MM-DD")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date end_date;
 	@JsonFormat(pattern = "YYYY-MM-DD")
 	private Date created_At;

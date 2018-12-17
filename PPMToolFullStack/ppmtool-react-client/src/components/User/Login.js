@@ -43,6 +43,19 @@ onSubmit(e){
 }
   render () {
     const { errors } = this.state;
+    const errorHandler = (errors)=>{
+      if(errors.password) {
+        return (
+          <div className="invalid-feedback">{errors.password}</div>
+        )}
+        else if(errors.message){
+          return (
+            <div className="alert alert-info text-center" role="alert">
+                  {errors.message}
+                </div>
+          )
+        }
+      }
     return (
       <div className="login">
               <div className="container">
@@ -72,9 +85,8 @@ onSubmit(e){
                                   value = {this.state.password}
                                   onChange = {this.onChange}
                                    />
-                                   {errors.password && (
-                                        <div className="invalid-feedback">{errors.password}</div>
-                                      )}
+                                   {
+                                      errorHandler(errors)}
                               </div>
                               <input type="submit" className="btn btn-info btn-block mt-4" />
                           </form>

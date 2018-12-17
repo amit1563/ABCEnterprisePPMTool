@@ -40,6 +40,19 @@ class AddProject extends React.Component{
   }
   render(){
     const {errors} = this.state;
+    const errorHandler = (errors)=>{
+    if(errors.projectIdentifier) {
+      return (
+        <div className="invalid-feedback">{errors.projectIdentifier}</div>
+      )}
+      else if(errors.message){
+        return (
+          <div className="alert alert-info text-center" role="alert">
+                {errors.message}
+              </div>
+        )
+      }
+    }
     return(
       <div className="project">
           <div className="container">
@@ -74,17 +87,10 @@ class AddProject extends React.Component{
                                value= {this.state.projectIdentifier}
                                 onChange = {this.onChange}
                                    />
-                                   {errors.projectIdentifier && (
-                                     <div className = "invalid-feedback">
-                                     {errors.projectIdentifier}
+                                   {
+                                     errorHandler(errors)
+                                   }
 
-                                     </div>
-                                   )}
-                                        {errors.message && (
-                                           <div className = "invalid-feedback">
-                                             {errors.message}
-                                        </div>
-                                        )}
 
                           </div>
                           <div className="form-group">

@@ -83,7 +83,7 @@ public class UserController {
 			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					userLoginRequest.getUsername(), userLoginRequest.getPassword()));
 		} catch (Exception ex) {
-			throw new DefaultRestException(ex.getMessage());
+			throw new DefaultRestException("Invalid Credentials please try again !!");
 		}
 
 		if (authentication != null)
