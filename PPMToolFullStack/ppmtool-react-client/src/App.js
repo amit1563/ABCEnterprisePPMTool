@@ -18,8 +18,9 @@ import {SET_CURRENT_USER} from './actions/types'
 import setJWTToken from './securityUtils/setJWTToken'
 import jwt_decode from 'jwt-decode'
 import { logout } from "./actions/userActions";
+import SecureRoute from './securityUtils/SecureRoute'
 
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 const token = localStorage.jwtToken;
    if(token){
@@ -54,12 +55,14 @@ class App extends Component {
         {
           //start of secure routing
         }
-        <Route exact path = "/addProject" component={AddProject} />
-        <Route exact path = "/dashboard" component={Dashboard}/>
-        <Route exact path = "/updateProject/:id" component ={updateProjectComponent}/>
-        <Route exact path = '/projectBoard/:id' component = {ProjectBoard} />
-        <Route exact path = '/addProjectTask/:id' component = {AddProjectTask} />
-        <Route exact path = '/updateProjectTask/:backlog_id/:projectSequence' component = {UpdateProjectTask} />
+        <Switch>
+        <SecureRoute exact path = "/addProject" component={AddProject} />
+        <SecureRoute exact path = "/dashboard" component={Dashboard}/>
+        <SecureRoute exact path = "/updateProject/:id" component ={updateProjectComponent}/>
+        <SecureRoute exact path = '/projectBoard/:id' component = {ProjectBoard} />
+        <SecureRoute exact path = '/addProjectTask/:id' component = {AddProjectTask} />
+        <SecureRoute exact path = '/updateProjectTask/:backlog_id/:projectSequence' component = {UpdateProjectTask} />
+        </Switch>
       </div>
       </Router>
         </Provider>

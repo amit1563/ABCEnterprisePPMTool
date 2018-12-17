@@ -21,6 +21,11 @@ class SignUp extends React.Component{
 onChange(e){
   this.setState({ [e.target.name] : e.target.value })
 }
+componentDidMount() {
+  if (this.props.security.validToken) {
+    this.props.history.push("/dashboard");
+  }
+}
 componentWillReceiveProps(nextProps){
   if(nextProps.errors){
     this.setState({errors : nextProps.errors})
@@ -145,12 +150,14 @@ onSubmit(e){
   }
 }
 const mapStateToProps = state =>({
-  errors : state.errors
+  errors : state.errors,
+  security : state.security
 })
 
 SignUp.propTypes = {
   signUp : PropTypes.func.isRequired,
-  errors : PropTypes.object.isRequired
+  errors : PropTypes.object.isRequired,
+  security :PropTypes.object.isRequired
 }
 export default connect(
   mapStateToProps,{signUp}
