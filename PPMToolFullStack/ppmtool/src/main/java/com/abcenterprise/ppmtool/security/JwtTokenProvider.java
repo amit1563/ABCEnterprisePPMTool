@@ -33,8 +33,8 @@ public class JwtTokenProvider {
 
 		Map<String, Object> claims = new HashMap<>();
 
-		claims.put(username, username);
-		claims.put(fullName, fullName);
+		claims.put("username", username);
+		claims.put("fullName", fullName);
 		claims.put("id", userId);
 
 		Date now = new Date(System.currentTimeMillis());
